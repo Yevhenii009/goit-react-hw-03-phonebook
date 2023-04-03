@@ -12,6 +12,21 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const contactsFromLocal = localStorage.getItem('contacts');
+
+    if (contactsFromLocal) {
+      const parsedContacts = JSON.parse(contactsFromLocal);
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   formSubmitData = data => {
     const normalizedName = data.name.toLowerCase();
     const filtredContacts = this.state.contacts.find(
